@@ -1,0 +1,5 @@
+{
+  "name": "My Top Albums",
+  "description": "A personal record of the albums that defined each year from 2020 to present, powered by Last.fm.",
+  "requestFramePermissions": []
+}
