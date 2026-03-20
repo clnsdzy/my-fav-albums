@@ -82,9 +82,25 @@ export function AlbumCard({ album }: AlbumCardProps) {
 
             <div className="mb-8 flex-1 overflow-y-auto pr-4 custom-scrollbar">
               <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-3">About the Album</p>
-              <div className="prose prose-invert prose-sm max-w-none text-zinc-400 leading-relaxed">
+              <div className="prose prose-invert prose-sm max-w-none text-zinc-400 leading-relaxed mb-6">
                 <ReactMarkdown>{summary.split('<a')[0]}</ReactMarkdown>
               </div>
+
+              {album.spotify_id && (
+                <div className="rounded-xl overflow-hidden bg-zinc-800/50">
+                  <iframe
+                    style={{ borderRadius: '12px' }}
+                    src={`https://open.spotify.com/embed/album/${album.spotify_id}?utm_source=generator&theme=0`}
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allowFullScreen
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    className="w-full"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="mt-auto flex flex-wrap gap-3 pt-6">

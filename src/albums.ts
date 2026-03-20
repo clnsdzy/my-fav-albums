@@ -6,13 +6,15 @@ export const MY_ALBUMS: Album[] = [
     year: 2024, rank: 1, artist: "Kendrick Lamar", album: "GNX", rating: 5,
     image: "/images/gnx.jpg",
     summary: "GNX is the sixth studio album by American rapper Kendrick Lamar. It was released on November 22, 2024, through PGLang and Columbia Records.",
-    spotify_url: "https://open.spotify.com/album/gnx", apple_url: "https://music.apple.com/album/gnx"
+    spotify_url: "https://open.spotify.com/album/gnx", apple_url: "https://music.apple.com/album/gnx",
+    spotify_id: "1KFWgQTw3EMTQebaaepVBI"
   },
   { 
     year: 2024, rank: 2, artist: "Sabrina Carpenter", album: "Short n' Sweet", rating: 4,
     image: "/images/shortnsweet.jpg",
     summary: "Short n' Sweet is the sixth studio album by American singer Sabrina Carpenter. It was released on August 23, 2024, through Island Records.",
-    spotify_url: "https://open.spotify.com/album/shortnsweet", apple_url: "https://music.apple.com/album/shortnsweet"
+    spotify_url: "https://open.spotify.com/album/shortnsweet", apple_url: "https://music.apple.com/album/shortnsweet",
+    spotify_id: "1989I66I66I66I66I66I66"
   },
   { 
     year: 2024, rank: 3, artist: "Charli XCX", album: "Brat", rating: 5,
