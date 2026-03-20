@@ -4,7 +4,6 @@ import { Album } from '../types';
 import { Rating } from './Rating';
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from './Dialog';
 import ReactMarkdown from 'react-markdown';
-import { formatNumber } from '../lib/utils';
 
 interface AlbumCardProps {
   album: Album;
@@ -79,14 +78,6 @@ export function AlbumCard({ album }: AlbumCardProps) {
                 <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Rating</p>
                 <Rating rating={album.rating} />
               </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Listeners</p>
-                <p className="font-mono text-sm font-medium text-zinc-200">{formatNumber(album.listeners)}</p>
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Playcount</p>
-                <p className="font-mono text-sm font-medium text-zinc-200">{formatNumber(album.playcount)}</p>
-              </div>
             </div>
 
             <div className="mb-8 flex-1 overflow-y-auto pr-4 custom-scrollbar">
@@ -96,15 +87,24 @@ export function AlbumCard({ album }: AlbumCardProps) {
               </div>
             </div>
 
-            <div className="mt-auto pt-6">
+            <div className="mt-auto flex flex-wrap gap-3 pt-6">
               <a
-                href={album.url}
+                href={album.spotify_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-bold text-bg transition-all hover:bg-accent/90 hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-[#1DB954] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#1DB954]/90 hover:scale-[1.02] active:scale-[0.98]"
               >
-                Listen on Last.fm
-                <Info className="h-4 w-4" />
+                Spotify
+                <Disc className="h-4 w-4" />
+              </a>
+              <a
+                href={album.apple_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-[#FA243C] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#FA243C]/90 hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Apple Music
+                <Disc className="h-4 w-4" />
               </a>
             </div>
           </div>

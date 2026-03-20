@@ -6,9 +6,8 @@ export interface Album {
   rating: number; // 1-5
   image: string;
   summary: string;
-  listeners: string;
-  playcount: string;
-  url: string;
+  spotify_url: string;
+  apple_url: string;
 }
 
 export interface AlbumCache {

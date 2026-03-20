@@ -4,7 +4,7 @@ import { Disc } from 'lucide-react';
 import { Hero } from './components/Hero';
 import { AlbumCard } from './components/AlbumCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/Select';
-import { MY_ALBUMS, YEARS } from './constants';
+import { MY_ALBUMS, YEARS } from './albums';
 
 export default function App() {
   const [selectedYear, setSelectedYear] = useState(YEARS[0]);
