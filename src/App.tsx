@@ -43,7 +43,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
             <AnimatePresence mode="popLayout">
               {sortedAlbums.map((album) => (
                 <motion.div
