@@ -9,7 +9,7 @@ export function Rating({ rating, className }: { rating: number; className?: stri
           key={star}
           className={cn(
             "h-3 w-3",
-            star <= rating ? "fill-accent text-accent" : "text-zinc-600"
+            star <= rating ? "fill-accent text-accent" : "text-text-muted opacity-30"
           )}
         />
       ))}

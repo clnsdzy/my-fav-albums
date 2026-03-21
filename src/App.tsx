@@ -1,15 +1,37 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Disc, Filter, SortAsc, Star } from 'lucide-react';
 import { AlbumCard } from './components/AlbumCard';
 import { MY_ALBUMS } from './albums';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/Select';
+import { ThemeToggle } from './components/ThemeToggle';
 
 export default function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    return 'dark';
+  });
+
   const [selectedYear, setSelectedYear] = useState<string>('All');
   const [selectedRating, setSelectedRating] = useState<string>('All');
   const [selectedGenre, setSelectedGenre] = useState<string>('All');
   const [sortBy, setSortBy] = useState<string>('rank');
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'light') {
+      root.classList.add('light');
+    } else {
+      root.classList.remove('light');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
   const years = useMemo(() => {
     const uniqueYears = Array.from(new Set(MY_ALBUMS.map(a => a.year))).sort((a, b) => b - a);
@@ -48,28 +70,30 @@ export default function App() {
   }, [selectedYear, selectedRating, selectedGenre, sortBy]);
 
   return (
-    <div className="min-h-screen bg-bg text-zinc-100">
+    <div className="min-h-screen bg-bg text-text-primary transition-colors duration-300">
+      <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+      
       <main className="mx-auto max-w-7xl px-6 py-12 md:py-20">
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-4">
             <Disc className="h-8 w-8 text-accent animate-spin-slow" />
-            <h1 className="font-serif text-4xl font-bold tracking-tight text-white md:text-6xl">
+            <h1 className="font-serif text-4xl font-bold tracking-tight text-text-primary md:text-6xl transition-colors duration-300">
               My Top <span className="text-accent italic">Albums</span>
             </h1>
           </div>
-          <p className="max-w-2xl text-lg text-zinc-400 font-sans">
+          <p className="max-w-2xl text-lg text-text-muted font-sans transition-colors duration-300">
             A curated collection of my all-time favorite records. Filter by genre, year, or rating to explore the soundscape.
           </p>
         </div>
 
         {/* Filters Section */}
-        <div className="mb-12 grid grid-cols-1 gap-4 rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 md:grid-cols-4">
+        <div className="mb-12 grid grid-cols-1 gap-4 rounded-xl border border-border-main bg-surface p-6 md:grid-cols-4 transition-all duration-300">
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
               <Filter className="h-3 w-3" /> Genre
             </label>
             <Select value={selectedGenre} onValueChange={setSelectedGenre}>
-              <SelectTrigger className="w-full border-zinc-800 bg-zinc-900 text-white">
+              <SelectTrigger className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
                 <SelectValue placeholder="All Genres" />
               </SelectTrigger>
               <SelectContent>
@@ -83,11 +107,11 @@ export default function App() {
           </div>
 
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
               <Filter className="h-3 w-3" /> Year
             </label>
             <Select value={selectedYear} onValueChange={setSelectedYear}>
-              <SelectTrigger className="w-full border-zinc-800 bg-zinc-900 text-white">
+              <SelectTrigger className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
                 <SelectValue placeholder="All Years" />
               </SelectTrigger>
               <SelectContent>
@@ -101,11 +125,11 @@ export default function App() {
           </div>
 
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
               <Star className="h-3 w-3" /> Rating
             </label>
             <Select value={selectedRating} onValueChange={setSelectedRating}>
-              <SelectTrigger className="w-full border-zinc-800 bg-zinc-900 text-white">
+              <SelectTrigger className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
                 <SelectValue placeholder="All Ratings" />
               </SelectTrigger>
               <SelectContent>
@@ -118,11 +142,11 @@ export default function App() {
           </div>
 
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+            <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
               <SortAsc className="h-3 w-3" /> Sort By
             </label>
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full border-zinc-800 bg-zinc-900 text-white">
+              <SelectTrigger className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
                 <SelectValue placeholder="Rank" />
               </SelectTrigger>
               <SelectContent>
@@ -135,11 +159,11 @@ export default function App() {
           </div>
         </div>
 
-        <div className="mb-8 flex items-center justify-between border-b border-zinc-800 pb-4">
-          <h2 className="font-serif text-2xl font-bold text-white">
+        <div className="mb-8 flex items-center justify-between border-b border-border-main pb-4 transition-colors duration-300">
+          <h2 className="font-serif text-2xl font-bold text-text-primary transition-colors duration-300">
             The <span className="text-accent italic">Collection</span>
           </h2>
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-text-muted transition-colors duration-300">
             Showing {filteredAndSortedAlbums.length} records
           </p>
         </div>
@@ -162,7 +186,7 @@ export default function App() {
         </div>
 
         {filteredAndSortedAlbums.length === 0 && (
-          <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 text-zinc-500">
+          <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border-main text-text-muted transition-colors duration-300">
             <Disc className="mb-4 h-12 w-12 opacity-20" />
             <p className="font-sans">No albums match your filters.</p>
             <button 
@@ -179,13 +203,13 @@ export default function App() {
         )}
       </main>
 
-      <footer className="border-t border-zinc-900 bg-zinc-950/50 px-6 py-12 text-center">
+      <footer className="border-t border-border-main bg-surface px-6 py-12 text-center transition-colors duration-300">
         <div className="mx-auto max-w-7xl">
-          <Disc className="mx-auto mb-4 h-8 w-8 text-zinc-800" />
-          <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-600">
+          <Disc className="mx-auto mb-4 h-8 w-8 text-border-main" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-text-muted">
             Curated by Collins • My All-Time Favorites
           </p>
-          <p className="mt-4 text-[10px] text-zinc-700">
+          <p className="mt-4 text-[10px] text-text-muted opacity-50">
             © 2026 My Top Albums. All rights reserved.
           </p>
         </div>

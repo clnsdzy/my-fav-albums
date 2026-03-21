@@ -1,5 +1,5 @@
 {
   "name": "My Top Albums",
-  "description": "A personal record of the albums that defined each year from 2020 to present, powered by Last.fm.",
+  "description": "A curated music archive of all-time favorite albums with filtering, sorting, and Spotify integration.",
   "requestFramePermissions": []
 }

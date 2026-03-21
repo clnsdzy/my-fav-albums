@@ -1,20 +1,37 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# My Top Albums
 
-# Run and deploy your AI Studio app
+A curated, interactive music archive showcasing all-time favorite records. This application provides a premium, gallery-like experience for exploring a personal collection of music that has defined a journey through sound.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/15d97394-e971-4347-be31-19de0a52732e
+- **All-Time Favorites**: A collection of 26 top-ranked albums with detailed summaries.
+- **Interactive Filtering**: Filter the collection by **Genre**, **Year**, and **Rating** to find exactly what you're looking for.
+- **Dynamic Sorting**: Sort albums by Rank, Year, Rating, or Album Name.
+- **Spotify Integration**: Listen to tracks directly within the app via embedded Spotify players in the album detail view.
+- **Premium Design**: A sophisticated dark theme using a deep navy palette (`#0d1b2a`) with high-quality typography (Brother 1816 for headings, Coltan Gea for body text).
+- **Responsive & Animated**: Smooth transitions and a fully responsive layout that works beautifully on all devices.
 
-## Run Locally
+## Tech Stack
 
-**Prerequisites:**  Node.js
+- **Frontend**: React 18 with TypeScript
+- **Styling**: Tailwind CSS for utility-first, artistic styling
+- **Animations**: Motion (formerly Framer Motion) for layout and entrance animations
+- **Icons**: Lucide React for consistent, crisp SVG icons
+- **Data**: Static album data with Spotify and Apple Music integration
 
+## Getting Started
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1.  Clone the repository.
+2.  Install dependencies: `npm install`
+3.  Start the development server: `npm run dev`
+4.  Open your browser to `http://localhost:3000`
+
+## Project Structure
+
+- `/src/albums.ts`: The source of truth for the album collection.
+- `/src/App.tsx`: The main application logic and layout.
+- `/src/components/`: Reusable UI components (AlbumCard, Select, Rating, etc.).
+- `/src/index.css`: Global styles and Tailwind theme configuration.
+- `/src/types.ts`: TypeScript interfaces for the data model.
+
+Curated with an audiophile's heart.

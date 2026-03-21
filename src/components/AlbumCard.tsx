@@ -18,7 +18,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
       <DialogTrigger asChild>
         <motion.div
           whileHover={{ scale: 1.02 }}
-          className="group relative cursor-pointer overflow-hidden rounded-md bg-zinc-900 shadow-lg"
+          className="group relative cursor-pointer overflow-hidden rounded-md bg-surface shadow-lg transition-colors duration-300"
         >
           {/* Album Art */}
           <div className="aspect-square w-full overflow-hidden">
@@ -36,20 +36,20 @@ export function AlbumCard({ album }: AlbumCardProps) {
           </div>
 
           {/* Hover Overlay */}
-          <div className="absolute inset-0 z-10 flex translate-y-full flex-col justify-end bg-gradient-to-t from-black via-black/80 to-transparent p-4 transition-transform duration-300 group-hover:translate-y-0">
-            <h3 className="line-clamp-1 font-serif text-lg font-bold leading-tight text-white">
+          <div className="absolute inset-0 z-10 flex translate-y-full flex-col justify-end bg-overlay p-4 transition-transform duration-300 group-hover:translate-y-0">
+            <h3 className="line-clamp-1 font-serif text-lg font-bold leading-tight text-text-primary">
               {album.album}
             </h3>
             <p className="mb-2 text-xs text-accent/90">{album.artist}</p>
             <Rating rating={album.rating} className="mb-2" />
-            <div className="line-clamp-2 text-[10px] leading-relaxed text-zinc-400">
+            <div className="line-clamp-2 text-[10px] leading-relaxed text-text-muted">
               <ReactMarkdown>{summary.split('<a')[0]}</ReactMarkdown>
             </div>
           </div>
         </motion.div>
       </DialogTrigger>
 
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-4xl bg-bg border-border-main transition-colors duration-300">
         <div className="flex flex-col md:flex-row">
           {/* Left: Art */}
           <div className="w-full md:w-[40%]">
@@ -69,11 +69,11 @@ export function AlbumCard({ album }: AlbumCardProps) {
                   Rank #{album.rank} • {album.year}
                 </span>
               </div>
-              <DialogTitle className="font-serif text-4xl font-bold text-white mb-1">{album.album}</DialogTitle>
+              <DialogTitle className="font-serif text-4xl font-bold text-text-primary mb-1">{album.album}</DialogTitle>
               <DialogDescription className="text-xl text-accent font-medium">{album.artist}</DialogDescription>
             </div>
 
-            <div className="mb-8 flex items-center gap-6 border-y border-zinc-800 py-4">
+            <div className="mb-8 flex items-center gap-6 border-y border-border-main py-4 transition-colors duration-300">
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Rating</p>
                 <Rating rating={album.rating} />
@@ -82,12 +82,12 @@ export function AlbumCard({ album }: AlbumCardProps) {
 
             <div className="mb-8 flex-1 overflow-y-auto pr-4 custom-scrollbar">
               <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-3">About the Album</p>
-              <div className="prose prose-invert prose-sm max-w-none text-zinc-400 leading-relaxed mb-6">
+              <div className="prose prose-invert prose-sm max-w-none text-text-muted leading-relaxed mb-6 transition-colors duration-300">
                 <ReactMarkdown>{summary.split('<a')[0]}</ReactMarkdown>
               </div>
 
               {album.spotify_id && (
-                <div className="rounded-xl overflow-hidden bg-zinc-800/50">
+                <div className="rounded-xl overflow-hidden bg-surface transition-colors duration-300">
                   <iframe
                     style={{ borderRadius: '12px' }}
                     src={`https://open.spotify.com/embed/album/${album.spotify_id}?utm_source=generator&theme=0`}
