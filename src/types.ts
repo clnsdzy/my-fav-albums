@@ -9,6 +9,7 @@ export interface Album {
   spotify_url: string;
   apple_url: string;
   spotify_id?: string;
+  genre: string;
 }
 
 export interface AlbumCache {
