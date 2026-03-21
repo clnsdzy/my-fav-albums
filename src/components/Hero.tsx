@@ -14,12 +14,12 @@ export function Hero() {
             My Top <span className="text-accent italic">Albums</span>
           </h1>
           <p className="max-w-xl text-lg leading-relaxed text-zinc-400 md:text-xl">
-            A personal record of the albums that defined each year. A journey through sound, curated with an audiophile's heart.
+            A personal record of the albums that defined my journey. A collection of all-time favorites, curated with an audiophile's heart.
           </p>
           
           <div className="mt-10 flex items-center gap-4">
             <div className="h-px w-12 bg-accent"></div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Est. 2020</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent">All-Time Favorites</span>
           </div>
         </motion.div>
       </div>

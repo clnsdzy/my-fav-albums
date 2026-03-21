@@ -1,15 +1,11 @@
-import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Disc } from 'lucide-react';
 import { Hero } from './components/Hero';
 import { AlbumCard } from './components/AlbumCard';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/Select';
-import { MY_ALBUMS, YEARS } from './albums';
+import { MY_ALBUMS } from './albums';
 
 export default function App() {
-  const [selectedYear, setSelectedYear] = useState(YEARS[0]);
-
-  const filteredAlbums = MY_ALBUMS.filter(a => a.year === selectedYear).sort((a, b) => a.rank - b.rank);
+  const sortedAlbums = [...MY_ALBUMS].sort((a, b) => a.rank - b.rank);
 
   return (
     <div className="min-h-screen bg-bg">
@@ -24,21 +20,9 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="hidden text-[10px] font-bold uppercase tracking-widest text-zinc-500 md:block">
-              Select Year
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+              All-Time Favorites
             </span>
-            <Select value={selectedYear.toString()} onValueChange={(val) => setSelectedYear(parseInt(val))}>
-              <SelectTrigger className="w-[120px] border-zinc-800 bg-zinc-900 text-white">
-                <SelectValue placeholder="Year" />
-              </SelectTrigger>
-              <SelectContent>
-                {YEARS.map(year => (
-                  <SelectItem key={year} value={year.toString()}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
         </div>
       </header>
@@ -50,20 +34,20 @@ export default function App() {
           <div className="mb-12 flex items-end justify-between border-b border-zinc-800 pb-6">
             <div>
               <h2 className="font-serif text-3xl font-bold text-white md:text-5xl">
-                Top Albums of <span className="text-accent italic">{selectedYear}</span>
+                All-Time <span className="text-accent italic">Favorites</span>
               </h2>
               <div className="mt-4 h-1 w-24 bg-accent"></div>
             </div>
             <p className="hidden text-sm text-zinc-500 md:block">
-              Showing {filteredAlbums.length} records
+              Showing {sortedAlbums.length} records
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
             <AnimatePresence mode="popLayout">
-              {filteredAlbums.map((album) => (
+              {sortedAlbums.map((album) => (
                 <motion.div
-                  key={`${album.year}-${album.rank}`}
+                  key={`${album.year}-${album.rank}-${album.album}`}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
@@ -83,7 +67,7 @@ export default function App() {
         <div className="mx-auto max-w-7xl">
           <Disc className="mx-auto mb-4 h-8 w-8 text-zinc-800" />
           <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-600">
-            Curated by Collins • Powered by Last.fm
+            Curated by Collins • My All-Time Favorites
           </p>
           <p className="mt-4 text-[10px] text-zinc-700">
             © 2026 My Top Albums. All rights reserved.
