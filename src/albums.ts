@@ -338,5 +338,18 @@ export const MY_ALBUMS: Album[] = [
     "apple_url": "https://music.apple.com/album/superbloom",
     "spotify_id": "8ZQe0Z2z8x2Zk9y2p0vZ3Z",
     "genre": "Jazz"
+  },
+  {
+    "year": 2025,
+    "rank": 27,
+    "artist": "Twenty One Pilots",
+    "album": "Breach",
+    "rating": 5,
+    "image": "/images/breach.jpg",
+    "summary": "Breach is a 2025 release by Twenty One Pilots, following their album Clancy and continuing the band's conceptual storyline.",
+    "spotify_url": "https://open.spotify.com/album/breach",
+    "apple_url": "https://music.apple.com/album/breach",
+    "spotify_id": "2b3c4d5e6f7g8h9i0j1k2l",
+    "genre": "Alternative"
   }
 ];
