@@ -54,13 +54,12 @@ function Collection() {
     <main className="mx-auto max-w-7xl px-6 py-12 md:py-20">
       <div className="mb-16">
         <div className="flex items-center gap-3 mb-4">
-          <Disc className="h-8 w-8 text-accent animate-spin-slow" />
           <h1 className="font-serif text-4xl font-bold tracking-tight text-text-primary md:text-6xl transition-colors duration-300">
             My Top <span className="text-accent italic">Albums</span>
           </h1>
         </div>
         <p className="max-w-2xl text-lg text-text-muted font-sans transition-colors duration-300">
-          A curated collection of my all-time favorite records. Filter by genre, year, or rating to explore the soundscape.
+          Good music is <span className='text-accent italic'>therapy.</span> A curated collection of my all-time favorite music records. Filter by genre, year, or rating to explore the soundscape.
         </p>
       </div>
 
@@ -142,7 +141,7 @@ function Collection() {
           The <span className="text-accent italic">Collection</span>
         </h2>
         <p className="text-sm text-text-muted transition-colors duration-300">
-          Showing {filteredAndSortedAlbums.length} records
+          Showing {filteredAndSortedAlbums.length} albums
         </p>
       </div>
 

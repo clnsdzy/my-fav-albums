@@ -42,8 +42,8 @@ export function AlbumCard({ album }: AlbumCardProps) {
             <h3 className="line-clamp-1 font-serif text-lg font-bold leading-tight text-text-primary">
               {album.album}
             </h3>
-            <p className="mb-2 text-xs text-accent/90">{album.artist}</p>
-            <Rating rating={album.rating} className="mb-2" />
+            <p className="text-xs text-accent/90">{album.artist}</p>
+            <p className="mb-2 text-xs">{album.year}</p>
             <div className="line-clamp-2 text-[10px] leading-relaxed text-text-muted">
               <ReactMarkdown>{summary.split('<a')[0]}</ReactMarkdown>
             </div>
@@ -92,7 +92,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
             <div className="mt-auto flex flex-wrap gap-3 pt-6">
               <button
                 onClick={() => navigate(`/album/${album.rank}`)}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-bold text-bg transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 text-white rounded-md bg-accent px-6 py-3 text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 Learn More
                 <Eye className="h-4 w-4" />

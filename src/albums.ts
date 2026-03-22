@@ -389,7 +389,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "20 Songs of Inspiration is a compilation album by American country singer Jim Reeves, released in 2000.",
     "spotify_url": "https://open.spotify.com/album/20songs",
     "apple_url": "https://music.apple.com/album/20songs",
-    "spotify_id": "1a2b3c4d5e6f7g8h9i0j1k",
+    "spotify_id": "1EDdpW9kfV7SkgDT2ScfKV",
     "genre": "Soul"
   },
   {
@@ -415,7 +415,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "A New Day Has Come is the seventeenth studio album by Canadian singer Celine Dion, released on March 25, 2002.",
     "spotify_url": "https://open.spotify.com/album/anewdayhascome",
     "apple_url": "https://music.apple.com/album/anewdayhascome",
-    "spotify_id": "4aawyAB9vmqN3uQ7FjRGTy",
+    "spotify_id": "1YQ5V21NSxR9ZauQ3RUbfZ",
     "genre": "Pop"
   },
   {
@@ -428,7 +428,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Not Just a Girl (The Highlights) is a greatest hits compilation by Canadian singer Shania Twain, released in 2022.",
     "spotify_url": "https://open.spotify.com/album/notjustagirl",
     "apple_url": "https://music.apple.com/album/notjustagirl",
-    "spotify_id": "5ZJrV7p5L3y9b2Yk6j7k8l",
+    "spotify_id": "1Gqoca4RxsEZCIAgx6PsTS",
     "genre": "Country"
   },
   {
@@ -441,8 +441,8 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Luv(sic) Hexalogy is a compilation album by Japanese producer Nujabes, released in 2015, featuring all parts of the Luv(sic) series with Shing02.",
     "spotify_url": "https://open.spotify.com/album/luv_sic",
     "apple_url": "https://music.apple.com/album/luv_sic",
-    "spotify_id": "6nVACH6a27eOWiumAJhDWS",
-    "genre": "Hip-hop"
+    "spotify_id": "4oT4YRVe43ESrT9rx2LKCM",
+    "genre": "Hip Hop"
   }
   
 ];
