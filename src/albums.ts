@@ -37,7 +37,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Studying Abroad is an EP by Jamaican-American artist Masego, released in 2020 as part of his Studying Abroad series.",
     "spotify_url": "https://open.spotify.com/album/studyingabroad",
     "apple_url": "https://music.apple.com/album/studyingabroad",
-    "spotify_id": "4x0PjRkX0l8c4Yk8BPVKxH",
+    "spotify_id": "6oeYpv6r7vTlbqGyAo6Isf",
     "genre": "R&B"
   },
   {
@@ -50,7 +50,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "The Death of Peace of Mind is the third studio album by American band Bad Omens, released on February 25, 2022.",
     "spotify_url": "https://open.spotify.com/album/tdopom",
     "apple_url": "https://music.apple.com/album/tdopom",
-    "spotify_id": "3p7m1d3n5K9YxX2z3k9Z0p",
+    "spotify_id": "1x6eC7V3NYQmscUnF9AK6T",
     "genre": "Alternative"
   },
   {
@@ -63,20 +63,20 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Genesys is the debut studio album by electronic artist Anyma, released in 2023.",
     "spotify_url": "https://open.spotify.com/album/genesys",
     "apple_url": "https://music.apple.com/album/genesys",
-    "spotify_id": "6kH0CzGJfX2s8J0p9fZ8Xw",
+    "spotify_id": "7rCb8j8kaVvoKE44Dxf21y",
     "genre": "Electronic"
   },
   {
     "year": 2020,
     "rank": 6,
     "artist": "Diplo",
-    "album": "Higher Ground",
+    "album": "Do You Dance?",
     "rating": 5,
     "image": "/images/higher_ground.jpg",
     "summary": "Higher Ground is a house-focused album by American DJ Diplo, released on October 2, 2020.",
     "spotify_url": "https://open.spotify.com/album/higherground",
     "apple_url": "https://music.apple.com/album/higherground",
-    "spotify_id": "1GqfY9qJc1v6h3nH0b8G6V",
+    "spotify_id": "6Az907HDvldO5qxqVyysz0",
     "genre": "Electronic"
   },
   {
@@ -89,7 +89,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "PARTYMOBILE is the third studio album by Canadian singer PARTYNEXTDOOR, released on March 27, 2020.",
     "spotify_url": "https://open.spotify.com/album/partymobile",
     "apple_url": "https://music.apple.com/album/partymobile",
-    "spotify_id": "2fYhqwDWXjbpjaIJPEfKFw",
+    "spotify_id": "7z20vHCSgu68lplj1Q976a",
     "genre": "R&B"
   },
   {
@@ -102,7 +102,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "The Space Between is the second studio album by Canadian duo Majid Jordan, released in 2017.",
     "spotify_url": "https://open.spotify.com/album/thespacebetween",
     "apple_url": "https://music.apple.com/album/thespacebetween",
-    "spotify_id": "0zicd2mBV8HTzSubByj4vP",
+    "spotify_id": "6tHcEzChizk2IXd5Kxl5hs",
     "genre": "R&B"
   },
   {
@@ -128,20 +128,20 @@ export const MY_ALBUMS: Album[] = [
     "summary": "An Evening with Silk Sonic is the debut studio album by Silk Sonic, released on November 12, 2021.",
     "spotify_url": "https://open.spotify.com/album/silksonic",
     "apple_url": "https://music.apple.com/album/silksonic",
-    "spotify_id": "3YV2p0FzR6g0sZ5q0fZ7uS",
+    "spotify_id": "1YgekJJTEueWDaMr7BYqPk",
     "genre": "Soul"
   },
   {
     "year": 2015,
     "rank": 11,
     "artist": "Lukas Graham",
-    "album": "The Blue Album",
+    "album": "Lukas Graham",
     "rating": 5,
     "image": "/images/the_blue_album.jpg",
     "summary": "Lukas Graham (Blue Album) is the second studio album by Danish band Lukas Graham, released in 2015.",
     "spotify_url": "https://open.spotify.com/album/thebluealbum",
     "apple_url": "https://music.apple.com/album/thebluealbum",
-    "spotify_id": "4Z7JG9E5p8l7e0pQz8G9yY",
+    "spotify_id": "4rFrdkSWs0dtj0rWPzOk1v",
     "genre": "Pop"
   },
   {
@@ -167,7 +167,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Communion is the debut studio album by British band Years & Years, released in 2015.",
     "spotify_url": "https://open.spotify.com/album/communion",
     "apple_url": "https://music.apple.com/album/communion",
-    "spotify_id": "6b7ycwe2rx9P3c1k1T1X8E",
+    "spotify_id": "0bWYlK9rRmIB68icHx9PNR",
     "genre": "Pop"
   },
   {
@@ -180,7 +180,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Mura Masa is the self-titled debut studio album by British producer Mura Masa, released in 2017.",
     "spotify_url": "https://open.spotify.com/album/muramas",
     "apple_url": "https://music.apple.com/album/muramas",
-    "spotify_id": "1DPqH6l8z5dC6H3G3u7P8K",
+    "spotify_id": "0NBTBo1qrg554sAj79nEqD",
     "genre": "Electronic"
   },
   {
@@ -189,11 +189,11 @@ export const MY_ALBUMS: Album[] = [
     "artist": "JOYRYDE",
     "album": "Brave",
     "rating": 5,
-    "image": "/images/brave.jpg",
+    "image": "/images/brave.png",
     "summary": "Brave is the debut studio album by English producer JOYRYDE, released in 2018.",
     "spotify_url": "https://open.spotify.com/album/brave",
     "apple_url": "https://music.apple.com/album/brave",
-    "spotify_id": "6oJ0X8k5Q6z5k3nP5X3Y8R",
+    "spotify_id": "5brsR3l3zFhJ4jGXh0wfF7",
     "genre": "Electronic"
   },
   {
@@ -219,7 +219,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Sick Boy is the second studio album by American duo The Chainsmokers, released in 2018.",
     "spotify_url": "https://open.spotify.com/album/sickboy",
     "apple_url": "https://music.apple.com/album/sickboy",
-    "spotify_id": "7ARtQpvnPN2ucbmVHngLOs",
+    "spotify_id": "6ZvDJs17O3woQirttKRYCG",
     "genre": "Pop"
   },
   {
@@ -232,20 +232,20 @@ export const MY_ALBUMS: Album[] = [
     "summary": "LSD is the debut album by supergroup LSD (Labrinth, Sia, Diplo), released in 2019.",
     "spotify_url": "https://open.spotify.com/album/lsd",
     "apple_url": "https://music.apple.com/album/lsd",
-    "spotify_id": "3RQQmkQEvNCY4prGKE6oc5",
+    "spotify_id": "0ujHQ5WCLuKJQXOqXpGtpf",
     "genre": "Pop"
   },
   {
-    "year": 2023,
+    "year": 2025,
     "rank": 19,
     "artist": "Balu Brigada",
     "album": "Portal",
     "rating": 5,
     "image": "/images/portal.jpg",
-    "summary": "Portal is a project by New Zealand duo Balu Brigada, released in 2023.",
+    "summary": "Portal is a project by New Zealand duo Balu Brigada, released in 2025.",
     "spotify_url": "https://open.spotify.com/album/portal",
     "apple_url": "https://music.apple.com/album/portal",
-    "spotify_id": "6ZQe0Z2z8x2Zk9y2p0vZ3W",
+    "spotify_id": "3T5osCmLRKocwvc1yobKwB",
     "genre": "Pop"
   },
   {
@@ -258,7 +258,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Actual Life 3 is part of Fred again..'s Actual Life series, released in 2022, often associated with his Blue-era releases.",
     "spotify_url": "https://open.spotify.com/album/fredagain",
     "apple_url": "https://music.apple.com/album/fredagain",
-    "spotify_id": "18yY9eZ9Y3K4l8m6u8W7Y2",
+    "spotify_id": "5q2iMctlDvEMYVIawF6Vop",
     "genre": "Electronic"
   },
   {
@@ -267,11 +267,11 @@ export const MY_ALBUMS: Album[] = [
     "artist": "Wurld",
     "album": "AFROSOUL",
     "rating": 5,
-    "image": "/images/afrosoul.jpg",
+    "image": "/images/afrosoul.png",
     "summary": "AFROSOUL is a project by Nigerian artist Wurld, released in 2016.",
     "spotify_url": "https://open.spotify.com/album/afrosoul",
     "apple_url": "https://music.apple.com/album/afrosoul",
-    "spotify_id": "3v4Q0G2d9z8k9n2k0dP1ZQ",
+    "spotify_id": "1uipEIm1EhYuT4UNSMHJq7",
     "genre": "Afro-fusion"
   },
   {
@@ -284,7 +284,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Dream II is an ambient/lo-fi project by sapientdream, released in 2019.",
     "spotify_url": "https://open.spotify.com/album/dream2",
     "apple_url": "https://music.apple.com/album/dream2",
-    "spotify_id": "4Yk5k8l0p9s8k2j3l4m5n6",
+    "spotify_id": "2m1AuTtIQMOp3al7jKpeKy",
     "genre": "Ambient"
   },
   {
@@ -297,7 +297,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Vol. 1 is a project release by The Silhouettes Project, released in 2020.",
     "spotify_url": "https://open.spotify.com/album/silhouettes",
     "apple_url": "https://music.apple.com/album/silhouettes",
-    "spotify_id": "5Yk5k8l0p9s8k2j3l4m5n7",
+    "spotify_id": "65wZziwWVCSSkYVlfmBodL",
     "genre": "Hip Hop"
   },
   {
@@ -310,7 +310,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Clancy is the seventh studio album by Twenty One Pilots, released in 2024.",
     "spotify_url": "https://open.spotify.com/album/clancy",
     "apple_url": "https://music.apple.com/album/clancy",
-    "spotify_id": "6ZQe0Z2z8x2Zk9y2p0vZ3X",
+    "spotify_id": "1KFWgQTw3EMTQebaaepVBI",
     "genre": "Alternative"
   },
   {
@@ -323,7 +323,7 @@ export const MY_ALBUMS: Album[] = [
     "summary": "From Zero is a 2024 release by Linkin Park marking a new era for the band.",
     "spotify_url": "https://open.spotify.com/album/fromzero",
     "apple_url": "https://music.apple.com/album/fromzero",
-    "spotify_id": "7ZQe0Z2z8x2Zk9y2p0vZ3Y",
+    "spotify_id": "4R6FV9NSzhPihHR0h4pI93",
     "genre": "Rock"
   },
   {
@@ -336,7 +336,113 @@ export const MY_ALBUMS: Album[] = [
     "summary": "Superbloom is a jazz/hip-hop influenced album by Kiefer, released in 2022.",
     "spotify_url": "https://open.spotify.com/album/superbloom",
     "apple_url": "https://music.apple.com/album/superbloom",
-    "spotify_id": "8ZQe0Z2z8x2Zk9y2p0vZ3Z",
+    "spotify_id": "5JRsQcXarNdaJfmFAqvuwj",
     "genre": "Jazz"
+  },
+  {
+    "year": 2025,
+    "rank": 27,
+    "artist": "Twenty One Pilots",
+    "album": "Breach",
+    "rating": 5,
+    "image": "/images/breach.jpg",
+    "summary": "Breach is a 2025 release by Twenty One Pilots, following their album Clancy and continuing the band's conceptual storyline.",
+    "spotify_url": "https://open.spotify.com/album/breach",
+    "apple_url": "https://music.apple.com/album/breach",
+    "spotify_id": "1El3k8dU3sKyoGUeuyrolH",
+    "genre": "Alternative"
+  },
+  {
+    "year": 2017,
+    "rank": 28,
+    "artist": "Calvin Harris",
+    "album": "Funk Wav Bounces Vol. 1",
+    "rating": 5,
+    "image": "/images/funk_wav_vol_1.jpg",
+    "summary": "Funk Wav Bounces Vol. 1 is the fifth studio album by Scottish DJ and producer Calvin Harris, released on June 30, 2017, through Columbia Records.",
+    "spotify_url": "https://open.spotify.com/album/funkwavvol1",
+    "apple_url": "https://music.apple.com/album/funkwavvol1",
+    "spotify_id": "2HaqChIDc5go3qxVunBDK0",
+    "genre": "Electronic"
+  },
+  
+  {
+    "year": 2020,
+    "rank": 29,
+    "artist": "Dua Lipa",
+    "album": "Future Nostalgia",
+    "rating": 5,
+    "image": "/images/future_nostalgia.jpg",
+    "summary": "Future Nostalgia is the second studio album by English singer Dua Lipa, released on March 27, 2020, via Warner Records.",
+    "spotify_url": "https://open.spotify.com/album/futurenostalgia",
+    "apple_url": "https://music.apple.com/album/futurenostalgia",
+    "spotify_id": "7fJJK56U9fHixgO0HQkhtI",
+    "genre": "Pop"
+  },
+  {
+    "year": 2000,
+    "rank": 30,
+    "artist": "Jim Reeves",
+    "album": "20 Songs of Inspiration",
+    "rating": 5,
+    "image": "/images/20_songs_of_inspiration.jpg",
+    "summary": "20 Songs of Inspiration is a compilation album by American country singer Jim Reeves, released in 2000.",
+    "spotify_url": "https://open.spotify.com/album/20songs",
+    "apple_url": "https://music.apple.com/album/20songs",
+    "spotify_id": "1a2b3c4d5e6f7g8h9i0j1k",
+    "genre": "Soul"
+  },
+  {
+    "year": 2015,
+    "rank": 31,
+    "artist": "Avicii",
+    "album": "Stories",
+    "rating": 5,
+    "image": "/images/stories.jpg",
+    "summary": "Stories is the second studio album by Swedish DJ and producer Avicii, released on October 2, 2015.",
+    "spotify_url": "https://open.spotify.com/album/stories",
+    "apple_url": "https://music.apple.com/album/stories",
+    "spotify_id": "7dqftJ3kas6D0VAdmt3k3V",
+    "genre": "Electronic"
+  },
+  {
+    "year": 2002,
+    "rank": 32,
+    "artist": "Celine Dion",
+    "album": "A New Day Has Come",
+    "rating": 5,
+    "image": "/images/a_new_day_has_come.jpg",
+    "summary": "A New Day Has Come is the seventeenth studio album by Canadian singer Celine Dion, released on March 25, 2002.",
+    "spotify_url": "https://open.spotify.com/album/anewdayhascome",
+    "apple_url": "https://music.apple.com/album/anewdayhascome",
+    "spotify_id": "4aawyAB9vmqN3uQ7FjRGTy",
+    "genre": "Pop"
+  },
+  {
+    "year": 2022,
+    "rank": 33,
+    "artist": "Shania Twain",
+    "album": "Not Just a Girl (The Highlights)",
+    "rating": 5,
+    "image": "/images/not_just_a_girl.jpg",
+    "summary": "Not Just a Girl (The Highlights) is a greatest hits compilation by Canadian singer Shania Twain, released in 2022.",
+    "spotify_url": "https://open.spotify.com/album/notjustagirl",
+    "apple_url": "https://music.apple.com/album/notjustagirl",
+    "spotify_id": "5ZJrV7p5L3y9b2Yk6j7k8l",
+    "genre": "Country"
+  },
+  {
+    "year": 2015,
+    "rank": 34,
+    "artist": "Nujabes",
+    "album": "Luv(sic) Hexalogy",
+    "rating": 5,
+    "image": "/images/luv_sic_hexalogy.jpg",
+    "summary": "Luv(sic) Hexalogy is a compilation album by Japanese producer Nujabes, released in 2015, featuring all parts of the Luv(sic) series with Shing02.",
+    "spotify_url": "https://open.spotify.com/album/luv_sic",
+    "apple_url": "https://music.apple.com/album/luv_sic",
+    "spotify_id": "6nVACH6a27eOWiumAJhDWS",
+    "genre": "Hip-hop"
   }
+  
 ];

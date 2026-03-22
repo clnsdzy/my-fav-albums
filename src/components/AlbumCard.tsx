@@ -1,15 +1,17 @@
 import { motion } from 'motion/react';
-import { Disc, Info } from 'lucide-react';
+import { Disc, Info, ExternalLink, Eye } from 'lucide-react';
 import { Album } from '../types';
 import { Rating } from './Rating';
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from './Dialog';
 import ReactMarkdown from 'react-markdown';
+import { useNavigate } from 'react-router-dom';
 
 interface AlbumCardProps {
   album: Album;
 }
 
 export function AlbumCard({ album }: AlbumCardProps) {
+  const navigate = useNavigate();
   const imageUrl = album.image;
   const summary = album.summary;
 
@@ -85,25 +87,16 @@ export function AlbumCard({ album }: AlbumCardProps) {
               <div className="prose prose-invert prose-sm max-w-none text-text-muted leading-relaxed mb-6 transition-colors duration-300">
                 <ReactMarkdown>{summary.split('<a')[0]}</ReactMarkdown>
               </div>
-
-              {album.spotify_id && (
-                <div className="rounded-xl overflow-hidden bg-surface transition-colors duration-300">
-                  <iframe
-                    style={{ borderRadius: '12px' }}
-                    src={`https://open.spotify.com/embed/album/${album.spotify_id}?utm_source=generator&theme=0`}
-                    width="100%"
-                    height="152"
-                    frameBorder="0"
-                    allowFullScreen
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                    className="w-full"
-                  />
-                </div>
-              )}
             </div>
 
             <div className="mt-auto flex flex-wrap gap-3 pt-6">
+              <button
+                onClick={() => navigate(`/album/${album.rank}`)}
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-bold text-bg transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Learn More
+                <Eye className="h-4 w-4" />
+              </button>
               <a
                 href={album.spotify_url}
                 target="_blank"
