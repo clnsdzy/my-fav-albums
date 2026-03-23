@@ -64,7 +64,7 @@ export default function AlbumDetails() {
             <div className="">
               <div className="relative aspect-square overflow-hidden rounded-2xl shadow-2xl ring-1 ring-border-main">
                 <img
-                  src={album.image}
+                  src={`${import.meta.env.BASE_URL}${album.image.replace(/^\//, "")}`}
                   alt={album.album}
                   className="h-full w-full object-cover"
                   referrerPolicy="no-referrer"
