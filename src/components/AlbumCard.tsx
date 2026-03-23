@@ -51,7 +51,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
         </motion.div>
       </DialogTrigger>
 
-      <DialogContent className="max-w-4xl bg-bg border-border-main transition-colors duration-300">
+      <DialogContent className="max-w-4xl mx-6 my-3 bg-bg border-border-main transition-colors duration-300">
         <div className="flex flex-col md:flex-row">
           {/* Left: Art */}
           <div className="w-full md:w-[40%]">
@@ -102,7 +102,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
                 href={album.apple_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden md-inline-flex items-center justify-center gap-2 rounded-md bg-[#FA243C] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#FA243C]/90 hover:scale-[1.02] active:scale-[0.98]"
+                className="hidden md:inline-flex items-center justify-center gap-2 rounded-md bg-[#FA243C] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#FA243C]/90 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Apple Music
                 <Disc className="h-4 w-4" />
