@@ -205,7 +205,7 @@ export default function App() {
   const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
   return (
-    <Router>
+    <Router basename="/my-fav-albums">
       <div className="min-h-screen bg-bg text-text-primary transition-colors duration-300">
         <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         
