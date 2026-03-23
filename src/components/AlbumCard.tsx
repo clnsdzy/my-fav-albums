@@ -51,7 +51,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
         </motion.div>
       </DialogTrigger>
 
-      <DialogContent className="max-w-4xl mx-6 my-3 bg-bg border-border-main transition-colors duration-300">
+      <DialogContent className="max-w-4xl bg-bg border-border-main transition-colors duration-300">
         <div className="flex flex-col md:flex-row">
           {/* Left: Art */}
           <div className="w-full md:w-[40%]">
