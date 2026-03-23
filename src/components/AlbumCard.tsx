@@ -19,13 +19,13 @@ export function AlbumCard({ album }: AlbumCardProps) {
     <Dialog>
       <DialogTrigger asChild>
         <motion.div
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1 }}
           className="group relative cursor-pointer overflow-hidden rounded-md bg-surface shadow-lg transition-colors duration-300"
         >
           {/* Album Art */}
           <div className="aspect-square w-full overflow-hidden">
             <img
-              src={imageUrl}
+              src={`${import.meta.env.BASE_URL}${album.image.replace(/^\//, "")}`}
               alt={`${album.album} by ${album.artist}`}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
               referrerPolicy="no-referrer"
@@ -56,7 +56,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
           {/* Left: Art */}
           <div className="w-full md:w-[40%]">
             <img
-              src={imageUrl}
+              src={`${import.meta.env.BASE_URL}${album.image.replace(/^\//, "")}`}
               alt={album.album}
               className="h-full w-full object-cover"
               referrerPolicy="no-referrer"
@@ -65,8 +65,8 @@ export function AlbumCard({ album }: AlbumCardProps) {
 
           {/* Right: Details */}
           <div className="flex flex-col p-6 md:w-[60%] md:p-10">
-            <div className="mb-6">
-              <div className="mb-2 flex items-center gap-3">
+            <div className="md:mb-6">
+              <div className="md:mb-2 flex items-center gap-3">
                 <span className="rounded-full bg-accent/10 px-3 py-1 text-[10px] font-bold tracking-widest text-accent uppercase">
                   Rank #{album.rank} • {album.year}
                 </span>
@@ -74,22 +74,14 @@ export function AlbumCard({ album }: AlbumCardProps) {
               <DialogTitle className="font-serif text-4xl font-bold text-text-primary mb-1">{album.album}</DialogTitle>
               <DialogDescription className="text-xl text-accent font-medium">{album.artist}</DialogDescription>
             </div>
-
-            <div className="mb-8 flex items-center gap-6 border-y border-border-main py-4 transition-colors duration-300">
-              <div>
-                <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">Rating</p>
-                <Rating rating={album.rating} />
-              </div>
-            </div>
-
             <div className="mb-8 flex-1 overflow-y-auto pr-4 custom-scrollbar">
-              <p className="text-[10px] uppercase tracking-wider text-zinc-500 mb-3">About the Album</p>
+              <p className="text-[10px] uppercase tracking-wider text-zinc-500 mt-2 mb-1">About the Album</p>
               <div className="prose prose-invert prose-sm max-w-none text-text-muted leading-relaxed mb-6 transition-colors duration-300">
                 <ReactMarkdown>{summary.split('<a')[0]}</ReactMarkdown>
               </div>
             </div>
 
-            <div className="mt-auto flex flex-wrap gap-3 pt-6">
+            <div className="mt-auto flex flex-wrap gap-2">
               <button
                 onClick={() => navigate(`/album/${album.rank}`)}
                 className="inline-flex items-center justify-center gap-2 text-white rounded-md bg-accent px-6 py-3 text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -110,7 +102,7 @@ export function AlbumCard({ album }: AlbumCardProps) {
                 href={album.apple_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-[#FA243C] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#FA243C]/90 hover:scale-[1.02] active:scale-[0.98]"
+                className="hidden md-inline-flex items-center justify-center gap-2 rounded-md bg-[#FA243C] px-6 py-3 text-sm font-bold text-white transition-all hover:bg-[#FA243C]/90 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Apple Music
                 <Disc className="h-4 w-4" />
