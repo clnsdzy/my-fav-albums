@@ -8,7 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ThemeToggle } from './components/ThemeToggle';
 
 const AlbumDetails = lazy(() => import('./pages/AlbumDetails'));
-const AlbumAdmin = import.meta.env.DEV ? lazy(() => import('./pages/AlbumAdmin')) : null;
+const AlbumAdmin = import.meta.env.DEV || import.meta.env.VITE_ALBUM_ADMIN_ENABLED === 'true'
+  ? lazy(() => import('./pages/AlbumAdmin'))
+  : null;
 const spotifyEndpoint = import.meta.env.VITE_SPOTIFY_STATUS_URL
   || (import.meta.env.DEV ? `${import.meta.env.BASE_URL}api/now-playing` : '');
 const NowPlaying = spotifyEndpoint ? lazy(() => import('./components/NowPlaying')) : null;

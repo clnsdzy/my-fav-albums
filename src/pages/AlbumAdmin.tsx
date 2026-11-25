@@ -3,11 +3,12 @@ import { ArrowLeft, Lock, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { MY_ALBUMS } from '../albums';
 
-type SavedAlbum = { slug: string; title: string };
+type SavedAlbum = { slug: string; title: string; commit?: string };
 type EditorStatus = 'loading' | 'unconfigured' | 'locked' | 'unlocked' | 'unavailable';
 type Session = { pinConfigured: boolean; authenticated: boolean; savedAlbum?: SavedAlbum };
 
 const apiBase = `${import.meta.env.BASE_URL}api/album-admin`;
+const online = import.meta.env.PROD;
 const genres = [...new Set(MY_ALBUMS.map(album => album.genre))].sort();
 const inputClass = 'w-full rounded-lg border border-border-main bg-bg px-3 py-2.5 text-text-primary placeholder:text-text-muted focus:outline-2 focus:outline-offset-2 focus:outline-accent';
 const submitClass = 'rounded-lg bg-accent px-5 py-2.5 font-bold text-[#212529] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60';
@@ -20,8 +21,14 @@ class RequestError extends Error {
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${apiBase}/${path}`, options);
-  const body = await response.json();
-  if (!response.ok) throw new RequestError(response.status, body.error);
+  const body = await response.json().catch(() => null);
+  if (!response.ok) {
+    const message = response.status === 429 ? 'Too many attempts. Wait a few minutes and try again.'
+      : response.status === 413 ? 'The uploaded files are too large.'
+      : 'The editor could not complete the request. Try again.';
+    throw new RequestError(response.status, body?.error ?? message);
+  }
+  if (!body) throw new Error('The editor returned an invalid response.');
   return body;
 }
 
@@ -41,22 +48,33 @@ async function prepareCover(file: File) {
   const cover = await createImageBitmap(file).catch(() => {
     throw new Error('Choose a valid JPEG, PNG, or WebP image.');
   });
-  try {
-    const scale = Math.min(1, 480 / Math.max(cover.width, cover.height));
+
+  function renderWebp(maxEdge: number, quality: number): Promise<Blob> {
+    const scale = Math.min(1, maxEdge / Math.max(cover.width, cover.height));
     const canvas = document.createElement('canvas');
     canvas.width = Math.max(1, Math.round(cover.width * scale));
     canvas.height = Math.max(1, Math.round(cover.height * scale));
     const context = canvas.getContext('2d');
-    if (!context) throw new Error('The browser could not prepare the thumbnail.');
+    if (!context) throw new Error('The browser could not prepare the artwork.');
     context.imageSmoothingQuality = 'high';
     context.drawImage(cover, 0, 0, canvas.width, canvas.height);
-    const thumbnail = await new Promise<Blob>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       canvas.toBlob(blob => {
         if (blob?.type === 'image/webp') resolve(blob);
-        else reject(new Error('The browser could not create a WebP thumbnail.'));
-      }, 'image/webp', 0.82);
+        else reject(new Error('The browser could not create WebP artwork.'));
+      }, 'image/webp', quality);
     });
-    const [originalData, thumbnailData] = await Promise.all([encodeFile(file), encodeFile(thumbnail)]);
+  }
+
+  try {
+    let uploadCover: Blob = file;
+    if (online) {
+      uploadCover = await renderWebp(1600, 0.87);
+      if (uploadCover.size > 2 * 1024 * 1024) uploadCover = await renderWebp(1200, 0.78);
+      if (uploadCover.size > 2 * 1024 * 1024) throw new Error('Choose a smaller album cover.');
+    }
+    const thumbnail = await renderWebp(480, 0.82);
+    const [originalData, thumbnailData] = await Promise.all([encodeFile(uploadCover), encodeFile(thumbnail)]);
     return { cover: originalData, thumbnail: thumbnailData };
   } finally {
     cover.close();
@@ -77,7 +95,7 @@ export default function AlbumAdmin() {
     }).catch((reason: unknown) => {
       if (controller.signal.aborted) return;
       setStatus('unavailable');
-      setError(reason instanceof RequestError ? reason.message : 'The local editor could not connect to Vite.');
+      setError(reason instanceof RequestError ? reason.message : 'The editor could not connect to the server.');
     });
     return () => controller.abort();
   }, []);
@@ -161,14 +179,16 @@ export default function AlbumAdmin() {
       {status === 'loading' && <p role="status" className="text-text-muted">Checking editor access…</p>}
       {status === 'unconfigured' && (
         <p className="rounded-xl border border-border-main bg-surface p-5 text-text-muted">
-          Set <code>ALBUM_ADMIN_PIN</code> to a 6–12 digit PIN in <code>.env.local</code> and restart Vite.
+          {online
+            ? 'The online editor is waiting for server setup.'
+            : <>Set <code>ALBUM_ADMIN_PIN</code> to a 6–12 digit PIN in <code>.env.local</code> and restart Vite.</>}
         </p>
       )}
       {status === 'locked' && (
         <form onSubmit={unlock} className="max-w-md space-y-4 rounded-xl border border-border-main bg-surface p-5 sm:p-6">
           <label className="block space-y-2">
             <span className="text-sm font-medium">Editor PIN</span>
-            <input name="pin" type="password" inputMode="numeric" pattern="[0-9]{6,12}" maxLength={12} autoComplete="off" required className={inputClass} />
+            <input name="pin" type="password" inputMode="numeric" pattern={online ? '[0-9]{12}' : '[0-9]{6,12}'} maxLength={12} autoComplete="off" required className={inputClass} />
           </label>
           <button type="submit" disabled={busy} className={`${submitClass} inline-flex items-center gap-2`}>
             <Lock aria-hidden="true" className="size-4" /> {busy ? 'Unlocking…' : 'Unlock editor'}
@@ -180,7 +200,10 @@ export default function AlbumAdmin() {
           {savedAlbum && (
             <p role="status" className="mb-4 rounded-lg border border-border-main bg-surface p-4">
               Added <strong>{savedAlbum.title}</strong>.{' '}
-              <Link to={`/album/${savedAlbum.slug}`} className="underline underline-offset-2">Open album</Link>
+              {savedAlbum.commit && 'The gallery will show it when the Vercel deployment finishes. '}
+              {online
+                ? <a href={`${import.meta.env.BASE_URL}album/${savedAlbum.slug}`} className="underline underline-offset-2">Open album</a>
+                : <Link to={`/album/${savedAlbum.slug}`} className="underline underline-offset-2">Open album</Link>}
             </p>
           )}
           <form onSubmit={addAlbum} className="grid gap-5 rounded-xl border border-border-main bg-surface p-5 sm:grid-cols-2 sm:p-6">
@@ -239,7 +262,7 @@ export default function AlbumAdmin() {
               <textarea name="summary" rows={4} required maxLength={4000} className={inputClass} />
             </label>
             <button type="submit" disabled={busy} className={`${submitClass} justify-self-start sm:col-span-2`}>
-              {busy ? 'Saving…' : 'Save album'}
+              {busy ? (online ? 'Publishing…' : 'Saving…') : (online ? 'Publish album' : 'Save album')}
             </button>
           </form>
         </>

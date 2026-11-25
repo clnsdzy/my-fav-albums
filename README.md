@@ -34,7 +34,11 @@ The Vercel build uses `vercel.json` to serve the gallery at the domain root. Use
 
 Set `ALBUM_ADMIN_PIN` to a 6–12 digit PIN in the gitignored `.env.local` file and start Vite. On localhost, follow **Add an album** in the footer or open `/my-fav-albums/#/admin`. Unlock the form and enter the album information, streaming links, and cover. The editor saves the catalog entry and creates a WebP thumbnail. Leave rank blank to append the album, or enter a rank to move the other albums down.
 
-The form writes to `src/album-catalog.json` and `public/images/`. Review the changes and run `npm run check:catalog` before publishing with the existing GitHub Pages workflow. The editor runs only on the local Vite server.
+The local form writes to `src/album-catalog.json` and `public/images/`. Review the changes and run `npm run check:catalog` before publishing.
+
+On Vercel, open [Add an album](https://my-fav-albums.vercel.app/#/admin). The online editor saves the catalog entry, cover, and thumbnail in a single commit to `main`. Vercel publishes the album on its next successful build. Pull `main` before editing the catalog locally.
+
+To enable the Vercel editor, add a new random 12-digit `ALBUM_ADMIN_PIN` and a fine-grained `ALBUM_ADMIN_GITHUB_TOKEN` as Production Secrets. Scope the token to `clnsdzy/my-fav-albums` with Contents read and write. Enable a Vercel Firewall rate limit on `POST /api/album-admin/session` before setting `VITE_ALBUM_ADMIN_ENABLED=true` for Production and redeploying.
 
 For a manual edit, keep each album's `slug` stable and leave `legacy_rank` intact for existing entries. Save a WebP thumbnail with the same base name in `public/images/thumbnails/`, with a longest edge of up to 480 pixels.
 
