@@ -1,18 +1,27 @@
-import { useState, useMemo, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { lazy, Suspense, useState, useMemo, useEffect } from 'react';
+import { HashRouter, Link, Navigate, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Disc, Filter, SortAsc, Star, ExternalLink } from 'lucide-react';
+import { Disc, Filter, SlidersHorizontal, SortAsc, Star } from 'lucide-react';
 import { AlbumCard } from './components/AlbumCard';
 import { MY_ALBUMS } from './albums';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/Select';
 import { ThemeToggle } from './components/ThemeToggle';
-import AlbumDetails from './pages/AlbumDetails';
+
+const AlbumDetails = lazy(() => import('./pages/AlbumDetails'));
+const AlbumAdmin = import.meta.env.DEV ? lazy(() => import('./pages/AlbumAdmin')) : null;
+const spotifyEndpoint = import.meta.env.VITE_SPOTIFY_STATUS_URL
+  || (import.meta.env.DEV ? `${import.meta.env.BASE_URL}api/now-playing` : '');
+const NowPlaying = spotifyEndpoint ? lazy(() => import('./components/NowPlaying')) : null;
+const ratings = [...new Set(MY_ALBUMS.map(album => album.rating))].sort((a, b) => b - a);
 
 function Collection() {
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState<string>('All');
   const [selectedRating, setSelectedRating] = useState<string>('All');
   const [selectedGenre, setSelectedGenre] = useState<string>('All');
   const [sortBy, setSortBy] = useState<string>('rank');
+  const filtersActive = selectedYear !== 'All' || selectedRating !== 'All'
+    || selectedGenre !== 'All' || sortBy !== 'rank';
 
   const years = useMemo(() => {
     const uniqueYears = Array.from(new Set(MY_ALBUMS.map(a => a.year))).sort((a, b) => b - a);
@@ -52,31 +61,54 @@ function Collection() {
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-12 md:py-20">
-      <div className="mb-16">
-        <div className="flex items-center gap-3 mb-4">
-          <h1 className="font-serif text-4xl font-bold tracking-tight text-text-primary md:text-6xl transition-colors duration-300">
+      <div className="mb-16 flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="min-w-0">
+          <h1 className="mb-4 font-serif text-4xl font-bold tracking-tight text-text-primary transition-colors duration-300 md:text-6xl">
             My Top <span className="text-accent italic">Albums</span>
           </h1>
+          <p className="max-w-2xl font-sans text-lg text-text-muted transition-colors duration-300">
+            Good music is <span className="text-accent italic">therapy.</span> A curated collection of my all-time favorite music records. Filter by genre, year, or rating to explore the soundscape.
+          </p>
         </div>
-        <p className="max-w-2xl text-lg text-text-muted font-sans transition-colors duration-300">
-          Good music is <span className='text-accent italic'>therapy.</span> A curated collection of my all-time favorite music records. Filter by genre, year, or rating to explore the soundscape.
-        </p>
+        {NowPlaying && <Suspense fallback={null}><NowPlaying endpoint={spotifyEndpoint} /></Suspense>}
       </div>
 
-      {/* Filters Section */}
-      <div className="mb-12 grid grid-cols-1 gap-4 rounded-xl border border-border-main bg-surface p-6 md:grid-cols-4 transition-all duration-300">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-border-main pb-4 transition-colors duration-300">
+        <h2 className="font-serif text-2xl font-bold text-text-primary transition-colors duration-300">
+          The <span className="text-accent italic">Collection</span>
+        </h2>
+        <div className="flex items-center gap-3">
+          <p role="status" className="text-sm text-text-muted transition-colors duration-300">
+            Showing {filteredAndSortedAlbums.length} albums
+          </p>
+          <button
+            type="button"
+            aria-controls="collection-filters"
+            aria-expanded={filtersOpen}
+            aria-label={`${filtersOpen ? 'Hide' : 'Show'} filters and sort${filtersActive ? ' (active)' : ''}`}
+            title={filtersOpen ? 'Hide filters and sort' : 'Show filters and sort'}
+            onClick={() => setFiltersOpen(open => !open)}
+            className="relative flex size-11 items-center justify-center rounded-lg border border-border-main bg-surface text-text-primary transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            <SlidersHorizontal aria-hidden="true" className="size-5" />
+            {filtersActive && <span aria-hidden="true" className="absolute top-1.5 right-1.5 size-2 rounded-full bg-accent" />}
+          </button>
+        </div>
+      </div>
+
+      <div id="collection-filters" className={filtersOpen ? 'mb-8 grid grid-cols-1 gap-4 rounded-xl border border-border-main bg-surface p-6 md:grid-cols-4' : 'hidden'}>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
+          <label htmlFor="filter-genre" className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
             <Filter className="h-3 w-3" /> Genre
           </label>
           <Select value={selectedGenre} onValueChange={setSelectedGenre}>
-            <SelectTrigger className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
+            <SelectTrigger id="filter-genre" className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
               <SelectValue placeholder="All Genres" />
             </SelectTrigger>
             <SelectContent>
               {genres.map(genre => (
                 <SelectItem key={genre} value={genre}>
-                  {genre}
+                  {genre === 'All' ? 'All Genres' : genre}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -84,17 +116,17 @@ function Collection() {
         </div>
 
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
+          <label htmlFor="filter-year" className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
             <Filter className="h-3 w-3" /> Year
           </label>
           <Select value={selectedYear} onValueChange={setSelectedYear}>
-            <SelectTrigger className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
+            <SelectTrigger id="filter-year" className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
               <SelectValue placeholder="All Years" />
             </SelectTrigger>
             <SelectContent>
               {years.map(year => (
                 <SelectItem key={year} value={year}>
-                  {year}
+                  {year === 'All' ? 'All Years' : year}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -102,28 +134,30 @@ function Collection() {
         </div>
 
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
+          <label htmlFor="filter-rating" className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
             <Star className="h-3 w-3" /> Rating
           </label>
           <Select value={selectedRating} onValueChange={setSelectedRating}>
-            <SelectTrigger className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
+            <SelectTrigger id="filter-rating" className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
               <SelectValue placeholder="All Ratings" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="All">All Ratings</SelectItem>
-              <SelectItem value="5">5 Stars</SelectItem>
-              <SelectItem value="4">4 Stars</SelectItem>
-              <SelectItem value="3">3 Stars</SelectItem>
+              {ratings.map(rating => (
+                <SelectItem key={rating} value={String(rating)}>
+                  {rating} {rating === 1 ? 'Star' : 'Stars'}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
+          <label htmlFor="sort-albums" className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">
             <SortAsc className="h-3 w-3" /> Sort By
           </label>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
+            <SelectTrigger id="sort-albums" className="w-full border-border-main bg-bg text-text-primary transition-colors duration-300">
               <SelectValue placeholder="Rank" />
             </SelectTrigger>
             <SelectContent>
@@ -136,27 +170,18 @@ function Collection() {
         </div>
       </div>
 
-      <div className="mb-8 flex items-center justify-between border-b border-border-main pb-4 transition-colors duration-300">
-        <h2 className="font-serif text-2xl font-bold text-text-primary transition-colors duration-300">
-          The <span className="text-accent italic">Collection</span>
-        </h2>
-        <p className="text-sm text-text-muted transition-colors duration-300">
-          Showing {filteredAndSortedAlbums.length} albums
-        </p>
-      </div>
-
       <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
         <AnimatePresence mode="popLayout">
-          {filteredAndSortedAlbums.map((album) => (
+          {filteredAndSortedAlbums.map((album, index) => (
             <motion.div
-              key={`${album.year}-${album.rank}-${album.album}`}
+              key={album.slug}
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
             >
-              <AlbumCard album={album} />
+              <AlbumCard album={album} prioritizeCover={index === 0} />
             </motion.div>
           ))}
         </AnimatePresence>
@@ -203,25 +228,32 @@ export default function App() {
   }, [theme]);
 
   const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  const floatingThemeToggle = <ThemeToggle theme={theme} toggleTheme={toggleTheme} />;
 
   return (
-    <Router basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
+    <HashRouter>
       <div className="min-h-screen bg-bg text-text-primary transition-colors duration-300">
-        <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
-        
-        <Routes>
-          <Route path="/" element={<Collection />} />
-          <Route path="/album/:rank" element={<AlbumDetails />} />
-        </Routes>
+        <Suspense fallback={<main role="status" className="mx-auto max-w-7xl px-6 py-12">Loading album…</main>}>
+          <Routes>
+            <Route path="/" element={<>{floatingThemeToggle}<Collection /></>} />
+            <Route
+              path="/album/:albumId"
+              element={<AlbumDetails themeToggle={<ThemeToggle theme={theme} toggleTheme={toggleTheme} placement="inline" />} />}
+            />
+            {AlbumAdmin && <Route path="/admin" element={<>{floatingThemeToggle}<AlbumAdmin /></>} />}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
 
         <footer className="border-t border-border-main bg-surface px-6 py-12 text-center transition-colors duration-300">
           <div className="mx-auto max-w-7xl">
             <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-text-muted">
-              Curated by <a href="http://x.com/clnsdzy" className='underline underline-offset-2' target="_blank" rel="noopener noreferrer">Collins </a> 
+              Curated by <a href="http://x.com/clnsdzy" className='underline underline-offset-2' target="_blank" rel="noopener noreferrer">Collins</a>
             </p>
+            {AlbumAdmin && <Link to="/admin" className="mt-4 inline-block text-sm text-text-muted underline underline-offset-2">Add an album</Link>}
           </div>
         </footer>
       </div>
-    </Router>
+    </HashRouter>
   );
 }

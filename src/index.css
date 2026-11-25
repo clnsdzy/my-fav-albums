@@ -5,6 +5,7 @@
   --font-sans: "Funnel Display", sans-serif;
   --font-serif: "Funnel Display", sans-serif;
   --color-accent: #c77dff;
+  --color-accent-text: var(--accent-text);
   /* --color-accent: #fb8500; */
   --color-bg: var(--bg);
   --color-surface: var(--surface);
@@ -15,6 +16,7 @@
 }
 
 :root {
+  --accent-text: var(--color-accent);
   --bg: #212529;
   --surface: rgba(24, 24, 27, 0.5);
   --border-main: #27272a;
@@ -24,6 +26,7 @@
 }
 
 .light {
+  --accent-text: #7532a8;
   --bg: #f8fafc;
   --surface: #ffffff;
   --border-main: #e2e8f0;

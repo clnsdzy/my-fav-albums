@@ -1,4 +1,6 @@
 export interface Album {
+  slug: string;
+  legacy_rank?: number;
   year: number;
   rank: number;
   artist: string;
@@ -6,12 +8,7 @@ export interface Album {
   rating: number; // 1-5
   image: string;
   summary: string;
-  spotify_url: string;
   apple_url: string;
-  spotify_id?: string;
+  spotify_id: string;
   genre: string;
-}
-
-export interface AlbumCache {
-  [key: string]: Album | null;
 }

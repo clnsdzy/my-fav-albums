@@ -1,183 +1,130 @@
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { ArrowLeft, Disc, ExternalLink, Star, Calendar, Hash, Music } from 'lucide-react';
+import { useEffect, type ReactNode } from 'react';
+import { Link, Navigate, useParams } from 'react-router-dom';
+import { ArrowLeft, ArrowUpRight, Disc } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { MY_ALBUMS } from '../albums';
 import { Rating } from '../components/Rating';
-import ReactMarkdown from 'react-markdown';
-import { useEffect } from 'react';
+import { getAlbumCoverPath, getSpotifyAlbumUrl } from '../lib/album-assets';
 
-export default function AlbumDetails() {
-  const { rank } = useParams<{ rank: string }>();
-  const navigate = useNavigate();
-  
-  const album = MY_ALBUMS.find(a => a.rank === parseInt(rank || '0'));
+const listenLinkClass = 'flex min-h-11 items-center justify-between gap-3 rounded-lg border px-3.5 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text';
+
+export default function AlbumDetails({ themeToggle }: { themeToggle: ReactNode }) {
+  const { albumId } = useParams();
+  const album = MY_ALBUMS.find(item => item.slug === albumId);
+  const legacyAlbum = albumId && /^\d+$/.test(albumId)
+    ? MY_ALBUMS.find(item => item.legacy_rank === Number(albumId))
+    : undefined;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [albumId]);
 
-  if (!album) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-bg p-6 text-center">
-        <Disc className="mb-6 h-20 w-20 animate-spin-slow text-accent opacity-20" />
-        <h1 className="mb-4 font-serif text-4xl font-bold text-text-primary">Album Not Found</h1>
-        <p className="mb-8 text-text-muted">The record you're looking for isn't in the collection.</p>
-        <button
-          onClick={() => navigate('/')}
-          className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-3 font-bold text-bg transition-transform hover:scale-105 active:scale-95"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          Back to Collection
-        </button>
-      </div>
-    );
+  if (legacyAlbum) {
+    return <Navigate to={`/album/${legacyAlbum.slug}`} replace />;
   }
 
   return (
-    <div className="min-h-screen bg-bg text-text-primary transition-colors duration-300">
-      {/* Navigation Header */}
-      <nav className="sticky top-0 z-50 border-b border-border-main bg-bg/80 backdrop-blur-md transition-colors duration-300">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link 
-            to="/" 
-            className="group flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-text-muted transition-colors hover:text-accent"
+    <>
+      <nav aria-label="Album navigation" className="sticky top-0 z-40 border-b border-border-main bg-bg/95 backdrop-blur-sm">
+        <div className="mx-auto grid min-h-15 max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-2 px-5 sm:px-8">
+          <Link
+            to="/"
+            aria-label="Back to collection"
+            className="inline-flex min-h-11 w-fit items-center gap-2 rounded text-sm font-medium text-text-muted transition-colors hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text"
           >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            Back
+            <ArrowLeft aria-hidden="true" className="size-4 shrink-0" /> Collection
           </Link>
-          <div className="flex items-center gap-2">
-            <Disc className="h-5 w-5 text-accent animate-spin-slow" />
-            <span className="font-serif font-bold italic text-text-primary">My Top Albums</span>
-          </div>
-          <div className="w-20" /> {/* Spacer for balance */}
+          <span className="flex items-center gap-2 text-sm font-bold text-text-primary">
+            <Disc aria-hidden="true" className="hidden size-4 text-accent-text sm:block" /> My Top Albums
+          </span>
+          <div className="justify-self-end">{themeToggle}</div>
         </div>
       </nav>
 
-      <main className="mx-auto max-w-7xl px-6 py-12 md:py-20">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
-          {/* Left: Visuals */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="">
-              <div className="relative aspect-square overflow-hidden rounded-2xl shadow-2xl ring-1 ring-border-main">
-                <img
-                  src={`${import.meta.env.BASE_URL}${album.image.replace(/^\//, "")}`}
-                  alt={album.album}
-                  className="h-full w-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-60" />
-                <div className="absolute bottom-8 left-8 right-8">
-                   <div className="flex items-center gap-4">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent text-2xl font-bold text-bg shadow-xl">
-                        #{album.rank}
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/80">Position in Top 100</p>
-                        <p className="font-serif text-xl font-bold text-white italic">The Collection</p>
-                      </div>
-                   </div>
-                </div>
+      {album ? (
+        <main className="mx-auto w-full max-w-xl px-5 pt-7 pb-12 sm:px-8 sm:pt-10 lg:max-w-6xl lg:pt-14 lg:pb-16">
+          <div className="grid min-w-0 gap-y-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-0 xl:gap-x-16">
+            <header className="min-w-0 lg:col-start-2 lg:row-start-1">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm font-medium text-text-muted">
+                <span className="rounded-md bg-accent/10 px-2.5 py-1 text-accent-text [overflow-wrap:anywhere]">{album.genre}</span>
+                <span>{album.year}</span>
+                <span aria-hidden="true">·</span>
+                <span>Rank {album.rank}</span>
               </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-8">
-              <a
-                href={album.spotify_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 rounded-xl bg-[#1DB954] px-8 py-4 font-bold text-white transition-all hover:bg-[#1DB954]/90 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[#1DB954]/20"
-              >
-                Open in Spotify
-                <ExternalLink className="h-5 w-5" />
-              </a>
-              <a
-                href={album.apple_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 rounded-xl bg-[#FA243C] px-8 py-4 font-bold text-white transition-all hover:bg-[#FA243C]/90 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[#FA243C]/20"
-              >
-                Apple Music
-                <ExternalLink className="h-5 w-5" />
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Right: Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col"
-          >
-            <div className="mb-10">
-              <div className="mb-4 flex flex-wrap gap-3">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-4 py-1.5 text-[10px] font-bold tracking-widest text-accent uppercase ring-1 ring-accent/20">
-                  <Music className="h-3 w-3" /> {album.genre}
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-surface px-4 py-1.5 text-[10px] font-bold tracking-widest text-text-muted uppercase ring-1 ring-border-main transition-colors duration-300">
-                  <Calendar className="h-3 w-3" /> {album.year}
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-surface px-4 py-1.5 text-[10px] font-bold tracking-widest text-text-muted uppercase ring-1 ring-border-main transition-colors duration-300">
-                  <Hash className="h-3 w-3" /> Rank {album.rank}
-                </span>
-              </div>
-              
-              <h1 className="mb-2 font-serif text-5xl font-bold tracking-tight text-text-primary md:text-7xl lg:text-8xl transition-colors duration-300">
+              <h1 className="mt-3 text-4xl leading-[1.05] font-bold tracking-tight text-balance [overflow-wrap:anywhere] sm:text-5xl lg:text-6xl">
                 {album.album}
               </h1>
-              <p className="font-serif text-3xl font-medium text-accent italic md:text-4xl">
-                {album.artist}
-              </p>
+              <p className="mt-2 text-xl font-medium text-accent-text [overflow-wrap:anywhere] sm:text-2xl">{album.artist}</p>
+              <div className="mt-4 flex items-center gap-2.5">
+                <Rating rating={album.rating} size={16} />
+                <span aria-hidden="true" className="text-sm font-medium text-text-muted">{album.rating}/5</span>
+              </div>
+            </header>
+
+            <div className="mx-auto aspect-square w-full max-w-lg self-start overflow-hidden rounded-2xl border border-border-main bg-surface lg:col-start-1 lg:row-span-2 lg:row-start-1">
+              <img
+                src={`${import.meta.env.BASE_URL}${getAlbumCoverPath(album.image)}`}
+                alt={`${album.album} album cover`}
+                className="block h-full w-full object-cover"
+                fetchPriority="high"
+                referrerPolicy="no-referrer"
+              />
             </div>
 
-            <div className="mb-12 grid grid-cols-2 gap-8 border-y border-border-main py-8 transition-colors duration-300">
-              <div>
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">Personal Rating</p>
-                <div className="flex items-center gap-3">
-                  <Rating rating={album.rating} size={24} />
-                  {/* <span className="text-lg font-bold text-text-primary">{album.rating}/5</span> */}
-                </div>
+            <div className="min-w-0 lg:col-start-2 lg:row-start-2 lg:pt-6">
+              <div className="grid max-w-lg grid-cols-1 gap-2.5 min-[360px]:grid-cols-2">
+                <a
+                  href={getSpotifyAlbumUrl(album.spotify_id)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open in Spotify"
+                  className={`${listenLinkClass} border-transparent bg-text-primary text-bg hover:opacity-85`}
+                >
+                  Spotify <ArrowUpRight aria-hidden="true" className="size-4 shrink-0" />
+                </a>
+                <a
+                  href={album.apple_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open in Apple Music"
+                  className={`${listenLinkClass} border-border-main bg-surface text-text-primary hover:border-accent`}
+                >
+                  Apple Music <ArrowUpRight aria-hidden="true" className="size-4 shrink-0" />
+                </a>
               </div>
-              <div>
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-text-muted">Listen On</p>
-                <div className="flex gap-4">
-                  <a href={album.spotify_url} target="_blank" rel="noopener noreferrer" className="text-text-muted transition-colors hover:text-[#1DB954]">
-                    <Disc className="h-6 w-6" />
-                  </a>
-                  <a href={album.apple_url} target="_blank" rel="noopener noreferrer" className="text-text-muted transition-colors hover:text-[#FA243C]">
-                    <Music className="h-6 w-6" />
-                  </a>
-                </div>
-              </div>
-            </div>
 
-            <div className="mb-12">
-              <h2 className="mb-6 text-[10px] font-bold uppercase tracking-[0.3em] text-text-muted">The Story</h2>
-              <div className="prose prose-invert prose-lg max-w-none text-text-muted leading-relaxed transition-colors duration-300">
-                <ReactMarkdown>{album.summary}</ReactMarkdown>
-              </div>
-            </div>
-              {album.spotify_id && (
-                <div className="mt-8 overflow-hidden rounded-2xl bg-surface p-1 shadow-lg ring-1 ring-border-main transition-colors duration-300">
-                  <iframe
-                    style={{ borderRadius: '12px' }}
-                    src={`https://open.spotify.com/embed/album/${album.spotify_id}?utm_source=generator&theme=0`}
-                    width="100%"
-                    height="600"
-                    frameBorder="0"
-                    allowFullScreen
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                    className="w-full"
-                  />
+              <section aria-labelledby="album-summary" className="mt-6 border-t border-border-main pt-5">
+                <h2 id="album-summary" className="mb-2 text-lg font-semibold tracking-tight">About the album</h2>
+                <div className="max-w-prose space-y-3 text-base/7 text-text-muted [overflow-wrap:anywhere] [&_a]:text-accent-text [&_a]:underline">
+                  <ReactMarkdown>{album.summary}</ReactMarkdown>
                 </div>
-              )}
-          </motion.div>
-        </div>
-      </main>
-    </div>
+              </section>
+            </div>
+          </div>
+
+          {album.spotify_id && (
+            <section aria-labelledby="album-preview" className="mt-9 border-t border-border-main pt-6 lg:mt-11">
+              <h2 id="album-preview" className="mb-3 text-xl font-semibold tracking-tight">Spotify preview</h2>
+              <iframe
+                title={`${album.album} on Spotify`}
+                src={`https://open.spotify.com/embed/album/${album.spotify_id}?utm_source=generator&theme=0`}
+                width="100%"
+                height={152}
+                allowFullScreen
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+                className="block w-full rounded-xl bg-surface ring-1 ring-border-main"
+              />
+            </section>
+          )}
+        </main>
+      ) : (
+        <main className="mx-auto flex min-h-[55vh] max-w-lg flex-col items-center justify-center px-5 py-14 text-center">
+          <Disc aria-hidden="true" className="mb-4 size-12 text-accent-text" />
+          <h1 className="text-3xl font-bold tracking-tight">Album not found</h1>
+          <p className="mt-2 text-text-muted">This album is missing from the collection.</p>
+        </main>
+      )}
+    </>
   );
 }
