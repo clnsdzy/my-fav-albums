@@ -487,5 +487,18 @@
     "apple_url": "https://music.apple.com/ng/album/the-new-abnormal/1498121188",
     "rank": 35,
     "image": "./images/the-new-abnormal.jpg"
+  },
+  {
+    "album": "Hunting High and Low",
+    "artist": "a-ha",
+    "genre": "Synth-pop",
+    "summary": "Hunting High and Low is the debut studio album by the Norwegian synth-pop band a-ha.",
+    "year": 1985,
+    "rating": 5,
+    "slug": "hunting-high-and-low",
+    "spotify_id": "1ER3B6zev5JEAaqhnyyfbf",
+    "apple_url": "https://music.apple.com/us/album/hunting-high-low-remastered/1037562339",
+    "rank": 36,
+    "image": "./images/hunting-high-and-low.webp"
   }
 ]
