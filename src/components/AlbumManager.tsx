@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Archive, ArrowDown, ArrowUp, History, Pencil, Plus, RotateCcw, Search, ListOrdered } from 'lucide-react';
+import { Archive, ArrowDown, ArrowUp, GripVertical, History, Pencil, Plus, RotateCcw, Search, ListOrdered } from 'lucide-react';
 import { request } from '../lib/album-admin-api';
 import { getAlbumThumbnailPath } from '../lib/album-assets';
 import type { AlbumCatalog, AlbumReceipt, DeploymentStatus, ManagedAlbum } from '../lib/album-management';
@@ -85,10 +85,12 @@ function AlbumOrder({ albums, disabled, onCancel, onSave }: {
   onSave: (order: string[]) => void;
 }) {
   const [ordered, setOrdered] = useState(albums);
+  const [dragging, setDragging] = useState<string>();
+  const [dropTarget, setDropTarget] = useState<string>();
   const changed = ordered.some((album, index) => album.slug !== albums[index].slug);
 
   function move(from: number, to: number) {
-    if (!Number.isInteger(to) || to < 0 || to >= ordered.length || from === to) return;
+    if (disabled || from < 0 || !Number.isInteger(to) || to < 0 || to >= ordered.length || from === to) return;
     setOrdered(items => {
       const next = [...items];
       const [album] = next.splice(from, 1);
@@ -97,18 +99,44 @@ function AlbumOrder({ albums, disabled, onCancel, onSave }: {
     });
   }
 
+  function endDrag() {
+    setDragging(undefined);
+    setDropTarget(undefined);
+  }
+
   return (
     <section className="rounded-2xl border border-border-main bg-surface">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-main p-4 sm:p-5">
         <div>
           <h2 className="text-xl font-bold">Reorder albums</h2>
-          <p className="mt-1 text-sm text-text-muted">Use the arrows or enter a new position.</p>
+          <p className="mt-1 text-sm text-text-muted">Drag an album, use the arrows, or enter a new position.</p>
         </div>
         <button type="button" className={secondaryClass} disabled={disabled} onClick={onCancel}>Cancel</button>
       </div>
       <ol className="divide-y divide-border-main">
         {ordered.map((album, index) => (
-          <li key={album.slug} className="flex min-w-0 flex-wrap items-center gap-3 p-3 sm:px-5">
+          <li key={album.slug}
+            className={`flex min-w-0 flex-wrap items-center gap-3 p-3 sm:px-5 ${dropTarget === album.slug ? 'bg-accent/10' : ''}`}
+            onDragOver={event => {
+              if (!dragging || disabled) return;
+              event.preventDefault();
+              event.dataTransfer.dropEffect = 'move';
+              setDropTarget(album.slug);
+            }}
+            onDrop={event => {
+              if (!dragging || disabled) return;
+              event.preventDefault();
+              move(ordered.findIndex(item => item.slug === dragging), index);
+              endDrag();
+            }}>
+            <span aria-hidden="true" draggable={!disabled} className="cursor-grab p-1 text-text-muted active:cursor-grabbing"
+              onDragStart={event => {
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', album.slug);
+                setDragging(album.slug);
+              }} onDragEnd={endDrag}>
+              <GripVertical className="size-5" />
+            </span>
             <Cover album={album} />
             <div className="min-w-24 flex-1">
               <p className="truncate font-semibold">{album.album}</p>
