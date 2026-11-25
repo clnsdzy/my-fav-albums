@@ -1,4 +1,4 @@
-import { createSpotifyStatusResponse } from '../playback';
+import { createSpotifyStatusResponse } from '../playback.js';
 
 const getStatus = createSpotifyStatusResponse(process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_REFRESH_TOKEN);
 

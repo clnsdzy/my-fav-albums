@@ -1,4 +1,4 @@
-import { isSpotifyCoverUrl, isSpotifyTrackUrl, type ListeningStatus, type ListeningTrack } from './status';
+import { isSpotifyCoverUrl, isSpotifyTrackUrl, type ListeningStatus, type ListeningTrack } from './status.js';
 
 type SpotifyTrack = {
   type?: string;
