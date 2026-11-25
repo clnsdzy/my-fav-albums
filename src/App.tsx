@@ -205,7 +205,7 @@ export default function App() {
   const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
 
   return (
-    <Router basename="/my-fav-albums">
+    <Router basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
       <div className="min-h-screen bg-bg text-text-primary transition-colors duration-300">
         <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         
