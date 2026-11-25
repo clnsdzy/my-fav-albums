@@ -24,7 +24,23 @@ export async function publishAlbum(upload: ReturnType<typeof prepareAlbumUpload>
       body: body ? JSON.stringify(body) : undefined,
       signal: AbortSignal.timeout(10000),
     });
-    if (!response.ok) throw new GithubError(response.status);
+    if (!response.ok) {
+      console.warn('GitHub rejected an album publish request.', {
+        method,
+        resource: path.split('?')[0],
+        status: response.status,
+      });
+      if (response.status === 429 || (response.status === 403 && response.headers.get('x-ratelimit-remaining') === '0')) {
+        throw new AdminError(503, 'GitHub is rate-limiting album uploads. Try again later.');
+      }
+      if (response.status === 401) {
+        throw new AdminError(502, 'GitHub rejected the editor token. Update ALBUM_ADMIN_GITHUB_TOKEN in Vercel.');
+      }
+      if (response.status === 403) {
+        throw new AdminError(502, 'GitHub denied the editor access. Check that its token has Contents read and write access to this repository.');
+      }
+      throw new GithubError(response.status);
+    }
     return response.json();
   }
 
