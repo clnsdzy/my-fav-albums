@@ -1,0 +1,3 @@
+export const inputClass = 'w-full rounded-lg border border-border-main bg-bg px-3 py-2.5 text-text-primary placeholder:text-text-muted focus:outline-2 focus:outline-offset-2 focus:outline-accent';
+export const submitClass = 'rounded-lg bg-accent px-5 py-2.5 font-bold text-[#212529] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60';
+export const secondaryClass = 'inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border-main bg-surface px-3 py-2 text-sm font-medium text-text-primary transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50';

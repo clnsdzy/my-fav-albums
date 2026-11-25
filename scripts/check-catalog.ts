@@ -1,5 +1,5 @@
 import { statSync } from 'node:fs';
-import { MY_ALBUMS } from '../src/albums';
+import { ALBUM_CATALOG } from '../src/albums';
 import { getAlbumCoverPath, getAlbumThumbnailPath } from '../src/lib/album-assets';
 import { albumSlugPattern, appleAlbumUrlPattern, spotifyIdPattern } from '../src/lib/catalog-validation';
 
@@ -10,7 +10,7 @@ const spotifyIds = new Set<string>();
 const appleUrls = new Set<string>();
 const errors: string[] = [];
 
-for (const album of MY_ALBUMS) {
+for (const album of ALBUM_CATALOG) {
   const { slug, rank, legacy_rank: legacyRank, rating, image, spotify_id: spotifyId, apple_url: appleUrl } = album;
   const name = `${album.album} by ${album.artist}`;
 
@@ -62,5 +62,5 @@ if (errors.length > 0) {
   console.error(errors.join('\n'));
   process.exitCode = 1;
 } else {
-  console.log(`Validated ${MY_ALBUMS.length} album records.`);
+  console.log(`Validated ${ALBUM_CATALOG.length} album records.`);
 }

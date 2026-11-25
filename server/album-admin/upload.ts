@@ -1,6 +1,5 @@
 import { getAlbumThumbnailPath } from '../../src/lib/album-assets.js';
 import { albumSlugPattern, appleAlbumUrlPattern, spotifyIdPattern } from '../../src/lib/catalog-validation.js';
-import type { Album } from '../../src/types.js';
 
 export class AdminError extends Error {
   constructor(readonly status: number, message: string) {
@@ -32,14 +31,14 @@ function imageExtension(buffer: Buffer) {
   if (buffer.toString('ascii', 0, 4) === 'RIFF' && buffer.toString('ascii', 8, 12) === 'WEBP') return 'webp';
 }
 
-function parseAlbum(body: Record<string, unknown>) {
+export function parseAlbum(body: Record<string, unknown>) {
   const album = requiredText(body.album, 'Album title', 120);
   const artist = requiredText(body.artist, 'Artist', 120);
   const genre = requiredText(body.genre, 'Genre', 60);
   const summary = requiredText(body.summary, 'Summary', 4000);
   const year = Number(body.year);
   const rating = Number(body.rating);
-  const rank = body.rank === '' ? undefined : Number(body.rank);
+  const rank = body.rank === '' || body.rank === undefined ? undefined : Number(body.rank);
 
   if (!Number.isInteger(year) || year < 1900 || year > 2100) {
     throw new AdminError(400, 'Enter a four-digit release year from 1900 to 2100.');
@@ -71,12 +70,9 @@ function parseAlbum(body: Record<string, unknown>) {
   return { album, artist, genre, summary, year, rating, rank, slug, spotify_id: spotifyId, apple_url: appleUrl };
 }
 
-function nextRank(albums: Album[]) {
-  return albums.reduce((highest, album) => Math.max(highest, album.rank), 0) + 1;
-}
+export type ArtworkLimits = { cover: number; thumbnail: number };
 
-export function prepareAlbumUpload(body: Record<string, unknown>, limits: { cover: number; thumbnail: number }) {
-  const { rank: requestedRank, ...album } = parseAlbum(body);
+export function prepareArtwork(body: Record<string, unknown>, limits: ArtworkLimits, filename: string) {
   const cover = coverBuffer(body.cover, limits.cover, 'album cover');
   const thumbnail = coverBuffer(body.thumbnail, limits.thumbnail, 'WebP thumbnail');
   const extension = imageExtension(cover);
@@ -84,34 +80,9 @@ export function prepareAlbumUpload(body: Record<string, unknown>, limits: { cove
     throw new AdminError(400, 'Choose a JPEG, PNG, or WebP cover with a WebP thumbnail.');
   }
 
-  const coverPath = `images/${album.slug}.${extension}`;
+  const coverPath = `images/${filename}.${extension}`;
   return {
-    album,
-    requestedRank,
     coverPath,
     images: [[coverPath, cover], [getAlbumThumbnailPath(coverPath), thumbnail]] as const,
   };
-}
-
-export function updateCatalog(catalog: Album[], upload: ReturnType<typeof prepareAlbumUpload>) {
-  const { album, requestedRank, coverPath } = upload;
-  const appendRank = nextRank(catalog);
-  const rank = requestedRank ?? appendRank;
-  if (rank > appendRank) {
-    throw new AdminError(400, `Rank must be from 1 to ${appendRank}.`);
-  }
-  if (catalog.some(existing => existing.slug === album.slug)) {
-    throw new AdminError(409, 'That URL slug already exists. Choose a different slug.');
-  }
-  if (catalog.some(existing => existing.spotify_id === album.spotify_id || existing.apple_url === album.apple_url)) {
-    throw new AdminError(409, 'An album with one of those music links already exists.');
-  }
-
-  const entry: Album = { ...album, rank, image: `./${coverPath}` };
-  const updated = catalog.map(existing => existing.rank >= rank
-    ? { ...existing, rank: existing.rank + 1 }
-    : existing);
-  updated.push(entry);
-  updated.sort((a, b) => a.rank - b.rank);
-  return { entry, updated };
 }

@@ -252,7 +252,7 @@ export default function App() {
             <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-text-muted">
               Curated by <a href="http://x.com/clnsdzy" className='underline underline-offset-2' target="_blank" rel="noopener noreferrer">Collins</a>
             </p>
-            {AlbumAdmin && <Link to="/admin" className="mt-4 inline-block text-sm text-text-muted underline underline-offset-2">Add an album</Link>}
+            {AlbumAdmin && <Link to="/admin" className="mt-4 inline-block text-sm text-text-muted underline underline-offset-2">Manage albums</Link>}
           </div>
         </footer>
       </div>

@@ -1,6 +1,7 @@
 export interface Album {
   slug: string;
   legacy_rank?: number;
+  archived?: boolean;
   year: number;
   rank: number;
   artist: string;

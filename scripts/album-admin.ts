@@ -3,7 +3,8 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import { open, readFile, rename, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import type { Plugin } from 'vite';
-import { AdminError, prepareAlbumUpload, updateCatalog } from '../server/album-admin/upload';
+import { catalogView, prepareCatalogChange, receipt } from '../server/album-admin/catalog';
+import { AdminError } from '../server/album-admin/upload';
 import type { Album } from '../src/types';
 
 const pinPattern = /^\d{6,12}$/;
@@ -53,8 +54,8 @@ async function readCatalog(root: string): Promise<Album[]> {
   return JSON.parse(await readFile(resolve(root, 'src/album-catalog.json'), 'utf8'));
 }
 
-async function saveAlbum(root: string, body: Record<string, unknown>) {
-  const upload = prepareAlbumUpload(body, { cover: coverLimit, thumbnail: thumbnailLimit });
+async function saveCatalog(root: string, body: Record<string, unknown>) {
+  const applyChange = prepareCatalogChange(body, { cover: coverLimit, thumbnail: thumbnailLimit });
 
   const lockPath = resolve(root, 'node_modules/.album-catalog-write.lock');
   const lock = await open(lockPath, 'wx').catch((error: NodeJS.ErrnoException) => {
@@ -67,8 +68,8 @@ async function saveAlbum(root: string, body: Record<string, unknown>) {
   const stagedCatalog = `${catalogPath}.${randomBytes(8).toString('hex')}.tmp`;
   let committed = false;
   try {
-    const { entry, updated } = updateCatalog(await readCatalog(root), upload);
-    for (const [path, contents] of upload.images) {
+    const change = applyChange(await readCatalog(root));
+    for (const [path, contents] of change.images ?? []) {
       const destination = resolve(root, 'public', path);
       const file = await open(destination, 'wx').catch((error: NodeJS.ErrnoException) => {
         if (error.code === 'EEXIST') throw new AdminError(409, 'A cover file already uses that slug. Choose a different slug.');
@@ -82,10 +83,10 @@ async function saveAlbum(root: string, body: Record<string, unknown>) {
       }
     }
 
-    await writeFile(stagedCatalog, JSON.stringify(updated, null, 2) + '\n', { flag: 'wx' });
+    await writeFile(stagedCatalog, JSON.stringify(change.updated, null, 2) + '\n', { flag: 'wx' });
     await rename(stagedCatalog, catalogPath);
     committed = true;
-    return entry;
+    return { ...receipt(change), catalog: catalogView(change.updated) };
   } finally {
     if (!committed) await Promise.allSettled([...created, stagedCatalog].map(path => unlink(path)));
     await lock.close();
@@ -155,13 +156,17 @@ export function albumAdmin(pin: string): Plugin {
           return reply(res, 200, { authenticated: false });
         }
 
-        if (route === '/albums' && req.method === 'POST') {
-          if (!authenticated) throw new AdminError(401, 'Unlock the editor to save an album.');
-          const body = await readJson(req, 16 * 1024 * 1024);
-          const album = await saveAlbum(server.config.root, body);
-          const saved = { slug: album.slug, title: album.album };
-          if (session?.token === token) session.savedAlbum = saved;
-          return reply(res, 201, saved);
+        if (route === '/albums') {
+          if (!authenticated) throw new AdminError(401, 'Unlock the editor to manage albums.');
+          if (req.method === 'GET') return reply(res, 200, catalogView(await readCatalog(server.config.root)));
+          if (req.method === 'POST') {
+            const body = await readJson(req, 16 * 1024 * 1024);
+            const saved = await saveCatalog(server.config.root, body);
+            if (session?.token === token && saved.slug && saved.title && (body.action === 'create' || body.action === undefined)) {
+              session.savedAlbum = { slug: saved.slug, title: saved.title };
+            }
+            return reply(res, 201, saved);
+          }
         }
 
         throw new AdminError(404, 'The editor route was not found.');
