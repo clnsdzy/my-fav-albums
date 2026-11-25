@@ -5,12 +5,26 @@ const cookieName = '__Host-album-admin-session';
 const cookieOptions = 'Path=/; Secure; HttpOnly; SameSite=Strict';
 const sessionSeconds = 60 * 60;
 const pinPattern = /^\d{12}$/;
+let reportedConfigIssue = false;
 
 export function adminConfig() {
-  const { ALBUM_ADMIN_PIN: pin, ALBUM_ADMIN_GITHUB_TOKEN: githubToken, VERCEL_ENV, VITE_ALBUM_ADMIN_ENABLED } = process.env;
-  if (VERCEL_ENV !== 'production' || VITE_ALBUM_ADMIN_ENABLED !== 'true'
-    || !pin || !pinPattern.test(pin) || !githubToken?.trim()) return;
-  return { pin, githubToken: githubToken.trim() };
+  const pin = process.env.ALBUM_ADMIN_PIN?.trim();
+  const githubToken = process.env.ALBUM_ADMIN_GITHUB_TOKEN?.trim();
+  const production = process.env.VERCEL_ENV === 'production';
+  const enabled = process.env.VITE_ALBUM_ADMIN_ENABLED === 'true';
+  const pinValid = Boolean(pin && pinPattern.test(pin));
+  if (production && enabled && pin && pinValid && githubToken) return { pin, githubToken };
+
+  if (!reportedConfigIssue) {
+    reportedConfigIssue = true;
+    console.warn('Album editor configuration incomplete.', {
+      production,
+      enabled,
+      pinPresent: Boolean(pin),
+      pinValid,
+      githubTokenPresent: Boolean(githubToken),
+    });
+  }
 }
 
 type AdminConfig = NonNullable<ReturnType<typeof adminConfig>>;
